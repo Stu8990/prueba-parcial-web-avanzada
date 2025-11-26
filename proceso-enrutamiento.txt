@@ -1,0 +1,222 @@
+========================================================================
+           PROCESO DE ENRUTAMIENTO - PROYECTO ANGULAR
+========================================================================
+
+PASO 1: CREACION DEL PROYECTO ANGULAR
+--------------------------------------
+- Ejecutamos: ng new mi-proyecto-angular --routing --style=css
+- Esto creo automaticamente el archivo de configuracion de rutas
+- Angular CLI genero la estructura basica con soporte para routing
+
+
+PASO 2: GENERACION DE COMPONENTES
+----------------------------------
+- Creamos el componente Home:
+  Comando: ng generate component home
+  Resultado:
+    * src/app/home/home.ts (componente)
+    * src/app/home/home.html (template)
+    * src/app/home/home.css (estilos)
+
+- Creamos el componente Acerca:
+  Comando: ng generate component acerca
+  Resultado:
+    * src/app/acerca/acerca.ts (componente)
+    * src/app/acerca/acerca.html (template)
+    * src/app/acerca/acerca.css (estilos)
+
+
+PASO 3: CONFIGURACION DE RUTAS
+-------------------------------
+Archivo: src/app/app.routes.ts
+
+Importamos los componentes:
+  import { Home } from './home/home';
+  import { Acerca } from './acerca/acerca';
+
+Definimos el array de rutas:
+  export const routes: Routes = [
+    {
+      path: '',
+      redirectTo: '/home',
+      pathMatch: 'full'
+    },
+    {
+      path: 'home',
+      component: Home
+    },
+    {
+      path: 'acerca',
+      component: Acerca
+    }
+  ];
+
+Explicacion:
+- Ruta vacia ('') redirige automaticamente a /home
+- Ruta 'home' carga el componente Home
+- Ruta 'acerca' carga el componente Acerca
+
+
+PASO 4: CONFIGURACION DEL COMPONENTE PRINCIPAL
+-----------------------------------------------
+Archivo: src/app/app.ts
+
+Importamos RouterLink para la navegacion:
+  import { RouterOutlet, RouterLink } from '@angular/router';
+
+Agregamos RouterLink a los imports del componente:
+  @Component({
+    selector: 'app-root',
+    imports: [RouterOutlet, RouterLink],
+    templateUrl: './app.html',
+    styleUrl: './app.css'
+  })
+
+
+PASO 5: CREACION DEL MENU DE NAVEGACION
+----------------------------------------
+Archivo: src/app/app.html
+
+Creamos un menu de navegacion usando routerLink:
+  <nav>
+    <h1>Mi Aplicacion Angular</h1>
+    <ul>
+      <li><a routerLink="/home">Home</a></li>
+      <li><a routerLink="/acerca">Acerca</a></li>
+    </ul>
+  </nav>
+
+  <router-outlet />
+
+Explicacion:
+- routerLink: permite navegar sin recargar la pagina
+- router-outlet: es donde se cargan los componentes segun la ruta
+
+
+PASO 6: PERSONALIZACION DE COMPONENTES
+---------------------------------------
+Componente Home (src/app/home/home.html):
+  <div>
+    <h2>Bienvenido a Home</h2>
+    <p>Esta es la pagina principal de la aplicacion.</p>
+  </div>
+
+Componente Acerca (src/app/acerca/acerca.html):
+  <div>
+    <h2>Acerca de Nosotros</h2>
+    <p>Esta es la pagina de informacion sobre la aplicacion.</p>
+  </div>
+
+
+PASO 7: ESTILOS DEL MENU
+-------------------------
+Archivo: src/app/app.css
+
+Agregamos estilos para el menu de navegacion:
+- Fondo oscuro para el nav
+- Enlaces blancos que cambian de color al hacer hover
+- Espaciado y padding para mejor visualizacion
+
+
+PASO 8: CREACION DEL BACKEND
+-----------------------------
+- Creamos carpeta backend dentro del proyecto
+- Inicializamos proyecto Node.js: npm init -y
+- Instalamos dependencias:
+  * npm install express cors
+  * npm install --save-dev nodemon
+
+
+PASO 9: CONFIGURACION DEL SERVIDOR EXPRESS
+-------------------------------------------
+Archivo: backend/server.js
+
+Creamos servidor con Express:
+- Puerto 3000
+- CORS habilitado para permitir conexion con Angular
+- Rutas API:
+  * GET / - Mensaje de bienvenida
+  * GET /api/home - Datos para Home
+  * GET /api/acerca - Datos para Acerca
+  * GET /api/datos - Lista de items
+
+
+COMO FUNCIONA EL ENRUTAMIENTO EN LA PRACTICA
+=============================================
+
+1. Usuario abre la aplicacion en http://localhost:4200
+
+2. Angular carga el componente principal (App)
+
+3. La ruta esta vacia (''), entonces Angular redirige a '/home'
+
+4. Angular busca en app.routes.ts la ruta 'home'
+
+5. Encuentra que debe cargar el componente Home
+
+6. El componente Home se renderiza dentro del <router-outlet>
+
+7. Usuario hace clic en el enlace "Acerca" del menu
+
+8. routerLink intercepta el clic y cambia la URL a '/acerca'
+
+9. Angular detecta el cambio de ruta
+
+10. Busca en app.routes.ts la ruta 'acerca'
+
+11. Carga el componente Acerca
+
+12. El componente Acerca reemplaza al componente Home en el router-outlet
+
+13. Todo esto ocurre SIN recargar la pagina (Single Page Application)
+
+
+VENTAJAS DE ESTE ENRUTAMIENTO
+==============================
+- Navegacion rapida (no recarga la pagina)
+- URLs limpias y amigables
+- Facil de mantener y escalar
+- Separacion clara entre componentes
+- Backend independiente del frontend
+
+
+COMANDOS PARA EJECUTAR EL PROYECTO
+===================================
+
+Frontend:
+  cd mi-proyecto-angular
+  npm start
+  Servidor: http://localhost:4200
+
+Backend:
+  cd mi-proyecto-angular/backend
+  npm run dev
+  Servidor: http://localhost:3000
+
+
+RUTAS DISPONIBLES
+=================
+
+Frontend:
+  http://localhost:4200/        -> Redirige a /home
+  http://localhost:4200/home    -> Componente Home
+  http://localhost:4200/acerca  -> Componente Acerca
+
+Backend:
+  http://localhost:3000/          -> Mensaje de bienvenida
+  http://localhost:3000/api/home  -> Datos para Home
+  http://localhost:3000/api/acerca -> Datos para Acerca
+  http://localhost:3000/api/datos  -> Lista de items
+
+
+ARCHIVOS IMPORTANTES DEL ENRUTAMIENTO
+======================================
+1. src/app/app.routes.ts       - Configuracion de todas las rutas
+2. src/app/app.ts              - Importa RouterLink y RouterOutlet
+3. src/app/app.html            - Menu con routerLink y router-outlet
+4. src/app/home/home.ts        - Componente de la ruta /home
+5. src/app/acerca/acerca.ts    - Componente de la ruta /acerca
+
+
+FIN DEL DOCUMENTO
+========================================================================
